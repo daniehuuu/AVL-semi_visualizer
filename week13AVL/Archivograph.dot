@@ -1,0 +1,40 @@
+digraph L {
+bgcolor = black
+node[color=white fontcolor=white shape=circle width=.6]
+edge[color=white]
+39->24;
+node[style=invis]
+edge[style=invis]
+39->"39?";
+node[style=solid]
+edge[style=solid]
+39->46;
+24->19;
+node[style=invis]
+edge[style=invis]
+24->"24?";
+node[style=solid]
+edge[style=solid]
+24->31;
+node[style=invis]
+edge[style=invis]
+46->"46?";
+46->"46=";
+node[style=solid]
+edge[style=solid]
+46->48;
+19->5;
+node[style=invis]
+edge[style=invis]
+19->"19?";
+19->"19=";
+node[style=solid]
+edge[style=solid]
+31->29;
+node[style=invis]
+edge[style=invis]
+31->"31?";
+node[style=solid]
+edge[style=solid]
+31->34;
+}
