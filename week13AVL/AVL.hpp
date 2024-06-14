@@ -179,14 +179,21 @@ private:
 		int hizq = _altura(nodo->izq);
 		int hder = _altura(nodo->der);
 		int fb = hder - hizq;
+		string reporte;
 		//int fb = hizq - hder; [Opcion2]
+		if (abs(fb) > 1)
+			reporte += "El nodo " + to_string(nodo->elemento) + " violo el fb (" + to_string(fb) + ")\n";
 
 		//[Opcion2]if (fb < -1) { //rotar a la izq [hizq < hder]
 		if (fb > 1) { //rotar a la izq [hizq < hder]
 			int hhizq = _altura(nodo->der->izq);
 			int hhder = _altura(nodo->der->der);
 			if (hhizq > hhder) { //verificar si aplica doble rotación RDI
+				reporte += "Se realizo una rotacion doble de derecha-izquierda\n";
 				_rotarDerecha(nodo->der);	// RSD
+			}
+			else {
+				reporte += "Se realizo una rotacion simple a la izquierda\n";
 			}
 			_rotarIzquierda(nodo);	// RSI
 		}
@@ -195,13 +202,17 @@ private:
 			int hhizq = _altura(nodo->izq->izq);
 			int hhder = _altura(nodo->izq->der);
 			if (hhizq < hhder) { //verificar si aplica doble rotación RDD
+				reporte += "Se realizo una rotacion doble de izquierda-derecha\n";
 				_rotarIzquierda(nodo->izq);	// RSI
+			}
+			else {
+				reporte += "Se realizo una rotacion simple a la derecha\n";
 			}
 			_rotarDerecha(nodo);	// RSD
 		}
 
 		if (abs(fb) > 1) {
-			cout << "El nodo " << nodo->elemento << " violo el fb entonces quedaria..." << endl;
+			cout << reporte;
 			dibujarArbol();
 		}
 	}
@@ -453,7 +464,7 @@ public:
 		string digraph = "digraph L {\nbgcolor = ""black""\nnode[color=white fontcolor=white shape=circle width=.6]\nedge[color=white]\n";
 		bool esRaiz = true;
 		levelOrder([&](Nodo<T>* nodo)-> void {
-			if(esRaiz)
+			if (esRaiz)
 				digraph += to_string(nodo->elemento) + ";\n";
 
 			if (nodo->izq && nodo->der) {
