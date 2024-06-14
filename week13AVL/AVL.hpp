@@ -5,6 +5,7 @@
 #include <queue>
 #include <functional>
 #include <cstdlib>
+#include <conio.h>
 #include <fstream>
 using namespace std;
 
@@ -12,7 +13,7 @@ template<class T>
 class ArbolAVL {
 private:
 	Nodo<T>* raiz;
-	void(*procesar)(T); //puntero a funciÛn
+	void(*procesar)(T); //puntero a funci√≥n
 	//Operaciones privadas
 	int _altura(Nodo<T>* nodo) {
 		int h = 0;
@@ -60,7 +61,7 @@ private:
 	p <- B
 
 	*/
-
+	//Balanceo --------------------------------------------
 	void _balanceo(Nodo<T>*& nodo) {
 		int hizq = _altura(nodo->izq);
 		int hder = _altura(nodo->der);
@@ -71,39 +72,145 @@ private:
 		if (fb > 1) { //rotar a la izq [hizq < hder]
 			int hhizq = _altura(nodo->der->izq);
 			int hhder = _altura(nodo->der->der);
-			if (hhizq > hhder) { //verificar si aplica doble rotaciÛn RDI
+			if (hhizq > hhder) { //verificar si aplica doble rotaci√≥n RDI
 				_rotarDerecha(nodo->der);	// RSD
-				dibujarArbol();
-				cout << "Presione cualquier tecla para continuar con la rutina de rotacion doble D-I...\n";
-				cin.get();
 			}
 			_rotarIzquierda(nodo);	// RSI
-			cout << "R.Izq" << endl;
+		}
+		//[Opcion2]else if (fb > 1) { //rotar a la der [hizq > hder]
+		else if (fb < -1) { //rotar a la der [hizq > hder]
+			int hhizq = _altura(nodo->izq->izq);
+			int hhder = _altura(nodo->izq->der);
+			if (hhizq < hhder) { //verificar si aplica doble rotaci√≥n RDD
+				_rotarIzquierda(nodo->izq);	// RSI
+			}
+			_rotarDerecha(nodo);	// RSD
+		}
+	}
+
+
+	void _balanceoDemoCompleta(Nodo<T>*& nodo) {
+		int hizq = _altura(nodo->izq);
+		int hder = _altura(nodo->der);
+		int fb = hder - hizq;
+		//int fb = hizq - hder; [Opcion2]
+
+		//[Opcion2]if (fb < -1) { //rotar a la izq [hizq < hder]
+		if (fb > 1) { //rotar a la izq [hizq < hder]
+			int hhizq = _altura(nodo->der->izq);
+			int hhder = _altura(nodo->der->der);
+			cout << "El nodo " << nodo->elemento << " violo el factor de balanceo (" << fb << ") " << endl;
+			if (hhizq > hhder) { //verificar si aplica doble rotaci√≥n RDI
+				cout << "Rotacion derecha (R. doble D-I)...\n";
+				_rotarDerecha(nodo->der);	// RSD
+				cin.get();
+				dibujarArbol();
+			}
+			cout << "R. izquierda..." << endl;
+			_rotarIzquierda(nodo);	// RSI
+			cin.get();
 			dibujarArbol();
 		}
 		//[Opcion2]else if (fb > 1) { //rotar a la der [hizq > hder]
 		else if (fb < -1) { //rotar a la der [hizq > hder]
 			int hhizq = _altura(nodo->izq->izq);
 			int hhder = _altura(nodo->izq->der);
-			if (hhizq < hhder) { //verificar si aplica doble rotaciÛn RDD
+			cout << "El nodo " << nodo->elemento << " violo el factor de balanceo (" << fb << ") " << endl;
+			if (hhizq < hhder) { //verificar si aplica doble rotaci√≥n RDD
+				cout << "Rotacion izquierda (R. doble I-D)...\n";
 				_rotarIzquierda(nodo->izq);	// RSI
-				dibujarArbol();
-				cout << "Presione cualquier tecla para continuar con la rutina de rotaciÛn doble I-D...\n";
 				cin.get();
+				dibujarArbol();
 			}
+			cout << "R. derecha..." << endl;
 			_rotarDerecha(nodo);	// RSD
-			cout << "R.Der" << endl;
+			cin.get();
 			dibujarArbol();
 		}
 	}
 
+	void _balanceoDemoRotaciones(Nodo<T>*& nodo) {
+		int hizq = _altura(nodo->izq);
+		int hder = _altura(nodo->der);
+		int fb = hder - hizq;
+		//int fb = hizq - hder; [Opcion2]
+
+		//[Opcion2]if (fb < -1) { //rotar a la izq [hizq < hder]
+		if (fb > 1) { //rotar a la izq [hizq < hder]
+			int hhizq = _altura(nodo->der->izq);
+			int hhder = _altura(nodo->der->der);
+			cout << "El nodo " << nodo->elemento << " violo el factor de balanceo (fb = " << fb << ") " << endl;
+			cout << "Mostrar AVL antes de las rotaciones... " << endl;
+			cin.get();
+			dibujarArbol();
+			if (hhizq > hhder) { //verificar si aplica doble rotaci√≥n RDI
+				cout << "Rotacion derecha (R. doble D-I)...\n";
+				_rotarDerecha(nodo->der);	// RSD
+				cin.get();
+				dibujarArbol();
+			}
+			cout << "R. izquierda..." << endl;
+			_rotarIzquierda(nodo);	// RSI
+			cin.get();
+			dibujarArbol();
+		}
+		//[Opcion2]else if (fb > 1) { //rotar a la der [hizq > hder]
+		else if (fb < -1) { //rotar a la der [hizq > hder]
+			int hhizq = _altura(nodo->izq->izq);
+			int hhder = _altura(nodo->izq->der);
+			cout << "El nodo " << nodo->elemento << " violo el factor de balanceo (fb = " << fb << ") " << endl;
+			cout << "Mostrar AVL antes de las rotaciones... " << endl;
+			cin.get();
+			dibujarArbol();
+			if (hhizq < hhder) { //verificar si aplica doble rotaci√≥n RDD
+				cout << "Rotacion izquierda (R. doble I-D)...\n";
+				_rotarIzquierda(nodo->izq);	// RSI
+				cin.get();
+				dibujarArbol();
+			}
+			cout << "R. derecha..." << endl;
+			_rotarDerecha(nodo);	// RSD
+			cin.get();
+			dibujarArbol();
+		}
+	}
+
+	void _balanceoSinRotaciones(Nodo<T>*& nodo) {
+		int hizq = _altura(nodo->izq);
+		int hder = _altura(nodo->der);
+		int fb = hder - hizq;
+		//int fb = hizq - hder; [Opcion2]
+
+		//[Opcion2]if (fb < -1) { //rotar a la izq [hizq < hder]
+		if (fb > 1) { //rotar a la izq [hizq < hder]
+			int hhizq = _altura(nodo->der->izq);
+			int hhder = _altura(nodo->der->der);
+			if (hhizq > hhder) { //verificar si aplica doble rotaci√≥n RDI
+				_rotarDerecha(nodo->der);	// RSD
+			}
+			_rotarIzquierda(nodo);	// RSI
+		}
+		//[Opcion2]else if (fb > 1) { //rotar a la der [hizq > hder]
+		else if (fb < -1) { //rotar a la der [hizq > hder]
+			int hhizq = _altura(nodo->izq->izq);
+			int hhder = _altura(nodo->izq->der);
+			if (hhizq < hhder) { //verificar si aplica doble rotaci√≥n RDD
+				_rotarIzquierda(nodo->izq);	// RSI
+			}
+			_rotarDerecha(nodo);	// RSD
+		}
+
+		if (abs(fb) > 1) {
+			cout << "El nodo " << nodo->elemento << " violo el fb entonces quedaria..." << endl;
+			dibujarArbol();
+		}
+	}
+
+	//insertar ----------------------------------------------------- 
 	bool _insertar(Nodo<T>*& nodo, T e) {
 		if (nodo == nullptr) { //Nuevo elemento
 			nodo = new Nodo<T>();
 			nodo->elemento = e;
-			dibujarArbol();
-			cout << "Presione cualquier tecla para continuar con la rutina de _insertar...\n";
-			cin.get();
 			return true;
 		}
 		else if (e == nodo->elemento) {
@@ -116,6 +223,69 @@ private:
 			_insertar(nodo->der, e);
 		}
 		_balanceo(nodo);
+		return true;
+	}
+
+	bool _demoCompletaInsertar(Nodo<T>*& nodo, T e) {
+		if (nodo == nullptr) { //Nuevo elemento
+			nodo = new Nodo<T>();
+			nodo->elemento = e;
+			cout << "Presione cualquier tecla para ver el AVL con el nodo insertado...\n";
+			cin.get();
+			dibujarArbol();
+			return true;
+		}
+		else if (e == nodo->elemento) {
+			return false;
+		}
+		else if (e < nodo->elemento) {
+			_demoCompletaInsertar(nodo->izq, e);
+		}
+		else if (e > nodo->elemento) {
+			_demoCompletaInsertar(nodo->der, e);
+		}
+		_balanceoDemoCompleta(nodo);
+		return true;
+	}
+
+	bool _demoRotacionesInsertar(Nodo<T>*& nodo, T e) {
+		if (nodo == nullptr) { //Nuevo elemento
+			nodo = new Nodo<T>();
+			nodo->elemento = e;
+			return true;
+		}
+		else if (e == nodo->elemento) {
+			return false;
+		}
+		else if (e < nodo->elemento) {
+			_demoRotacionesInsertar(nodo->izq, e);
+		}
+		else if (e > nodo->elemento) {
+			_demoRotacionesInsertar(nodo->der, e);
+		}
+		_balanceoDemoRotaciones(nodo);
+		return true;
+	}
+
+	bool _demoSinRotacionesInsertar(Nodo<T>*& nodo, T e) {
+		if (nodo == nullptr) { //Nuevo elemento
+			nodo = new Nodo<T>();
+			nodo->elemento = e;
+			cout << "Presione cualquier tecla para ver el AVL con el nodo insertado...\n";
+			cin.get();
+			dibujarArbol();
+			return true;
+		}
+		else if (e == nodo->elemento) {
+			return false;
+		}
+		else if (e < nodo->elemento) {
+			_demoSinRotacionesInsertar(nodo->izq, e);
+		}
+		else if (e > nodo->elemento) {
+			_demoSinRotacionesInsertar(nodo->der, e);
+		}
+		_balanceoSinRotaciones(nodo);
 		return true;
 	}
 
@@ -177,42 +347,42 @@ private:
 			}
 
 			//Analizamos el escenario en el que se encuentra el Nodo a eliminar
-			else { // r==0 es porque se encontrÛ el elemento e en el arbol	| si (nodo->elemento == e)
+			else { // r==0 es porque se encontr√≥ el elemento e en el arbol	| si (nodo->elemento == e)
 				if (nodo->der == nullptr && nodo->izq == nullptr) {	//Caso 1: Hoja
 					nodo = nullptr;
-					delete nodo;	//*REZC: SÌ se puede hacer delete nullptr, porque nullptr es un puntero
+					delete nodo;	//*REZC: S√≠ se puede hacer delete nullptr, porque nullptr es un puntero
 					return true;
 				}
-				else if (nodo->izq == nullptr) { //Caso 2: Izq VacÌo y Der No VacÌo
+				else if (nodo->izq == nullptr) { //Caso 2: Izq Vac√≠o y Der No Vac√≠o
 					nodo = nodo->der;
 					return true;
 				}
-				else if (nodo->der == nullptr) { //Caso 3: Der VacÌo e Izq No VacÌo
+				else if (nodo->der == nullptr) { //Caso 3: Der Vac√≠o e Izq No Vac√≠o
 					nodo = nodo->izq;
 					return true;
 				}
-				else { //Caso 4: Izq y Der No VacÌos
+				else { //Caso 4: Izq y Der No Vac√≠os
 					/*
-					// [OPCION 1] El elegido ser· el menor (el que esta mas a la izquierda) de la derecha
+					// [OPCION 1] El elegido ser√° el menor (el que esta mas a la izquierda) de la derecha
 					Nodo<T>* aux = nodo->der; //Se establece buscar el menor elemento por la derecha [PPT: Nodo es la Raiz, aux es 35]
 					while (aux->izq != nullptr)
 					{
 					  aux = aux->izq; //Se obtiene la hoja menor
 					}
 					nodo->elemento = aux->elemento; //Se actualiza el elemento en el nodo raiz y
-					//return _eliminar(nodo->der, aux->elemento); //se envÌa a eliminar el elemento en el arbol por la derecha
-					_eliminar(nodo->der, aux->elemento); //se envÌa a eliminar el elemento en el arbol por la derecha
+					//return _eliminar(nodo->der, aux->elemento); //se env√≠a a eliminar el elemento en el arbol por la derecha
+					_eliminar(nodo->der, aux->elemento); //se env√≠a a eliminar el elemento en el arbol por la derecha
 					*/
 
-					// [OPCION 2] El elegido ser· el mayor (el que esta mas a la derecha) de la izquierda
+					// [OPCION 2] El elegido ser√° el mayor (el que esta mas a la derecha) de la izquierda
 					Nodo<T>* aux = nodo->izq; //Se establece buscar el menor elemento por la derecha [PPT: Nodo es la Raiz, aux es 35]
 					while (aux->der != nullptr)
 					{
 						aux = aux->der; //Se obtiene la hoja menor
 					}
 					nodo->elemento = aux->elemento; //Se actualiza el elemento en el nodo raiz y
-					//return _eliminar(nodo->der, aux->elemento); //se envÌa a eliminar el elemento en el arbol por la derecha
-					_eliminar(nodo->izq, aux->elemento); //se envÌa a eliminar el elemento en el arbol por la derecha
+					//return _eliminar(nodo->der, aux->elemento); //se env√≠a a eliminar el elemento en el arbol por la derecha
+					_eliminar(nodo->izq, aux->elemento); //se env√≠a a eliminar el elemento en el arbol por la derecha
 
 				}
 			}
@@ -234,6 +404,17 @@ public:
 		return _insertar(raiz, e);
 	}
 
+	bool InsertarDemoCompleta(T e) {
+		return _demoCompletaInsertar(raiz, e);
+	}
+
+	bool InsertarDemoRotaci√≥n(T e) {
+		return _demoRotacionesInsertar(raiz, e);
+	}
+
+	bool InsertarDemoSinRotaci√≥n(T e) {
+		return _demoSinRotacionesInsertar(raiz, e);
+	}
 	void inOrden() {
 		_inOrden(raiz);
 	}
@@ -266,38 +447,44 @@ public:
 		}
 	}
 
-	//que los nodos vacÌos se aÒaden en base a la altura del ·rbol
+	//que los nodos vac√≠os se a√±aden en base a la altura del √°rbol
 	void dibujarArbol() {
-		if (!raiz) return;
+		if (!this->raiz) return;
 		string digraph = "digraph L {\nbgcolor = ""black""\nnode[color=white fontcolor=white shape=circle width=.6]\nedge[color=white]\n";
-		bool existenMasNodos = false;
+		bool esRaiz = true;
 		levelOrder([&](Nodo<T>* nodo)-> void {
-			bool vacioDerecho = false;
+			if(esRaiz)
+				digraph += to_string(nodo->elemento) + ";\n";
+
+			if (nodo->izq && nodo->der) {
+				digraph += to_string(nodo->elemento) + "->" + to_string(nodo->izq->elemento) + ";\n";
+				digraph += "node[style=invis]\nedge[style=invis]\n"; //cambia el formato del nodo a uno "vac√≠o"
+				digraph += to_string(nodo->elemento) + "->" + "\"" + to_string(nodo->elemento) + "?\"" + ";\n"; //agrega un nodo vac√≠o al medio
+				digraph += "node[style=solid]\nedge[style=solid]\n"; //devuelve el formato del nodo a su estado original
+				digraph += to_string(nodo->elemento) + "->" + to_string(nodo->der->elemento) + ";\n";
+				esRaiz = false;
+				return;
+			}
+
 			if (nodo->izq) {
 				digraph += to_string(nodo->elemento) + "->" + to_string(nodo->izq->elemento) + ";\n";
-				digraph += "node[style=invis]\nedge[style=invis]\n"; //cambia el formato del nodo a uno "vacÌo"
-				digraph += to_string(nodo->elemento) + "->" + "\"" + to_string(nodo->elemento) + "?\"" + ";\n"; //agrega un nodo vacÌo al medio
-				if(nodo->der == nullptr)
-					digraph += to_string(nodo->elemento) + "->" + "\"" + to_string(nodo->elemento) + "=\"" + ";\n"; //agrega un nodo vacÌo al final
+				digraph += "node[style=invis]\nedge[style=invis]\n"; //cambia el formato del nodo a uno "vac√≠o"
+				digraph += to_string(nodo->elemento) + "->" + "\"" + to_string(nodo->elemento) + "?\"" + ";\n"; //agrega un nodo vac√≠o al medio
+				digraph += to_string(nodo->elemento) + "->" + "\"" + to_string(nodo->elemento) + "=\"" + ";\n"; //agrega un nodo vac√≠o al final
 				digraph += "node[style=solid]\nedge[style=solid]\n"; //devuelve el formato del nodo a su estado original
-				vacioDerecho = true;
-				existenMasNodos = true;
+				esRaiz = false;
+				return;
 			}
-			
 
 			if (nodo->der) {
-				if (!vacioDerecho) { //llena el vacÌo derecho y el vacÌo del medio
-					digraph += "node[style=invis]\nedge[style=invis]\n";
-					digraph += to_string(nodo->elemento) + "->" + "\"" + to_string(nodo->elemento) + "?\"" + ";\n";
-					digraph += to_string(nodo->elemento) + "->" + "\"" + to_string(nodo->elemento) + "=\"" + ";\n";
-					digraph += "node[style=solid]\nedge[style=solid]\n";
-				}
-
+				digraph += "node[style=invis]\nedge[style=invis]\n";
+				digraph += to_string(nodo->elemento) + "->" + "\"" + to_string(nodo->elemento) + "?\"" + ";\n";
+				digraph += to_string(nodo->elemento) + "->" + "\"" + to_string(nodo->elemento) + "=\"" + ";\n";
+				digraph += "node[style=solid]\nedge[style=solid]\n";
 				digraph += to_string(nodo->elemento) + "->" + to_string(nodo->der->elemento) + ";\n";
-				existenMasNodos = true;
+				esRaiz = false;
 			}
-			if(!existenMasNodos)
-				digraph += to_string(nodo->elemento) + ";\n";
+
 			});
 
 		digraph += "}\n";
@@ -312,19 +499,15 @@ public:
 		archivographvs.close();
 		system("dot -Tpng Archivograph.dot -o Archivograph.png");
 		system("start Archivograph.png");
+		cout << "Continue..." << endl;
+		cin.get();
+		//system("close Archivo.png");
 	}
-
 	void imprimeArbol() {
 		_imprimeArbol(raiz, "", true);
 	}
 
 	bool Eliminar(T e) {
 		return _eliminar(raiz, e);
-	}
-
-	void demoTarea(T e) {
-		//dibujarArbol();
-		Insertar(e);
-		dibujarArbol();
 	}
 };
