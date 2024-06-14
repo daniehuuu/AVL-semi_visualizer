@@ -18,6 +18,7 @@ int main() {
 	cout << "Demo del dibujo de ";
 	for (auto a : v)
 		cout << a << " ";
+	cout << endl;
 	tree->dibujarArbol();
 	delete tree;
 	system("cls");
@@ -40,7 +41,7 @@ int main() {
 		system("cls");
 	}
 	delete treeRand;
-
+	
 	ArbolAVL <int>* treeRand2 = new ArbolAVL<int>(imprimir);
 	for (int i = 0; i < rand.size(); i++) {
 		cout << "Demo solo de rotaciones del AVL: " << endl;
@@ -53,8 +54,11 @@ int main() {
 		cin.get();
 		system("cls");
 	}
+	
+	cout << "Arbol final..." << endl;
+	treeRand2->dibujarArbol();
+	system("cls");
 	delete treeRand2;
-	cin.get();
 
 	ArbolAVL <int>* treeRand3 = new ArbolAVL<int>(imprimir);
 	for (int i = 0; i < rand.size(); i++) {
